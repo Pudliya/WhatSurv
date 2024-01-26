@@ -16,7 +16,7 @@ export default function PostPage() {
   const auth = getAuth();
   const user = auth.currentUser;
   const router = useRouter();
-  const [formData, setFormData] = useState<FormData>({
+  const initialFormData: FormData = {
     id: '',
     title: '',
     content: '',
@@ -26,12 +26,34 @@ export default function PostPage() {
     researchType: '',
     researchTime: '',
     researchLocation: '',
+    email: null,
+    views: 0,
+    userId: undefined,
     likes: false,
+    updatedAt: Timestamp.now(),
     deadlineDate: null as firebase.firestore.Timestamp | null,
     createdAt: Timestamp.now(),
-    nickname: user?.displayName,
+    nickname: user?.displayName ?? null,
     surveyData: [{question: '', options: ['매우 그렇다', '그렇다', '보통이다', '아니다', '매우 아니다']}],
-  });
+  };
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+
+  // const [formData, setFormData] = useState<FormData>({
+  //   id: '',
+  //   title: '',
+  //   content: '',
+  //   category: '',
+  //   ageGroup: '',
+  //   sexType: '',
+  //   researchType: '',
+  //   researchTime: '',
+  //   researchLocation: '',
+  //   likes: false,
+  //   deadlineDate: null as firebase.firestore.Timestamp | null,
+  //   createdAt: Timestamp.now(),
+  //   nickname: user?.displayName ?? null,
+  //   surveyData: [{question: '', options: ['매우 그렇다', '그렇다', '보통이다', '아니다', '매우 아니다']}],
+  // });
 
   const [selectedDeadline, setSelectedDeadline] = useState<Date | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -63,7 +85,7 @@ export default function PostPage() {
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value} = e.target;
     setFormData(prevData => ({
-      ...prevData,
+      ...(prevData as FormData),
       [name]: value,
     }));
 
@@ -83,13 +105,14 @@ export default function PostPage() {
     setIsSubmitting(true);
 
     try {
-      const updatedFormData = {
+      const updatedFormData: FormData = {
         ...formData,
       };
       console.log('formData before saving:', formData); // Log the formData for debugging
       await addPost(updatedFormData);
 
-      setFormData({
+      setFormData(prevData => ({
+        ...(prevData as FormData),
         id: '',
         title: '',
         content: '',
@@ -102,9 +125,9 @@ export default function PostPage() {
         deadlineDate: null as firebase.firestore.Timestamp | null,
         createdAt: Timestamp.now(),
         likes: false,
-        nickname: user?.displayName,
+        nickname: user?.displayName ?? null,
         surveyData: [{question: '', options: ['', '', '', '', '']}],
-      });
+      }));
 
       setIsRedirecting(true);
       setIsFormChanged(false);

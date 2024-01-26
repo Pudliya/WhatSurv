@@ -1,12 +1,12 @@
 import type {Metadata} from 'next';
 import {Inter} from 'next/font/google';
 
-import ProvidersLayout from './(providers)/layout';
-import './globals.css';
+import React from 'react';
+import Footer from './(providers)/(root)/_components/Footer';
 import Header from './(providers)/(root)/_components/Header';
 import MainWrapper from './(providers)/(root)/_components/MainWrapper';
-import Footer from './(providers)/(root)/_components/Footer';
-import React from 'react';
+import ProvidersLayout from './(providers)/layout';
+import './globals.css';
 
 const inter = Inter({subsets: ['latin']});
 
@@ -21,14 +21,10 @@ export type HTMLLayoutProps = {
 
 export default function HTMLLayout({children}: HTMLLayoutProps) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <ProvidersLayout>
-          <Header />
-          <MainWrapper>{children}</MainWrapper>
-          <Footer />
-        </ProvidersLayout>
-      </body>
-    </html>
+    <ProvidersLayout>
+      <Header />
+      <MainWrapper>{children}</MainWrapper>
+      <Footer />
+    </ProvidersLayout>
   );
 }

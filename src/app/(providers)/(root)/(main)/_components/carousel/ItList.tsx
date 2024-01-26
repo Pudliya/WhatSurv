@@ -1,16 +1,14 @@
 'use client';
 import {getPosts} from '@/app/api/firebaseApi';
+import {Post} from '@/app/api/typePost';
+import {db} from '@/firebase';
 import {useQuery} from '@tanstack/react-query';
 import {doc, getDoc, updateDoc} from 'firebase/firestore';
-import {db} from '@/firebase';
-import {useState} from 'react';
-import {FaRegHeart} from 'react-icons/fa';
 import Link from 'next/link';
-import {useRef} from 'react';
-import {Swiper, SwiperSlide} from 'swiper/react';
-import {Post} from '@/app/api/typePost';
+import {useRef, useState} from 'react';
+import {FaCalendarAlt, FaRegHeart} from 'react-icons/fa';
 import {IoPeopleSharp} from 'react-icons/io5';
-import {FaCalendarAlt} from 'react-icons/fa';
+import {Swiper, SwiperSlide} from 'swiper/react';
 
 // Swiper styles
 import 'swiper/css';
@@ -132,14 +130,11 @@ export default function ItList() {
                       <p className="flex items-center gap-2 text-sm text-[#666]">
                         <FaCalendarAlt />{' '}
                         <span className="text-[#0051FF]">
-                          {post.createdAt.toLocaleString('ko-KR', {year: 'numeric', month: '2-digit', day: '2-digit'})}{' '}
-                          ~ &nbsp;
+                          {post.createdAt.toLocaleString()} ~ &nbsp;
                           {post.deadlineDate
-                            ? post.deadlineDate.toDate
-                              ? post.deadlineDate
-                                  .toDate()
-                                  .toLocaleString('ko-KR', {year: 'numeric', month: '2-digit', day: '2-digit'})
-                              : '2099.12.31'
+                            ? post.deadlineDate
+                                .toDate() // Add parentheses here
+                                .toLocaleString('ko-KR', {year: 'numeric', month: '2-digit', day: '2-digit'})
                             : '2099.12.31'}
                         </span>
                       </p>
